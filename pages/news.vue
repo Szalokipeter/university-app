@@ -12,13 +12,12 @@
       >
         <v-card outlined class="flex-grow-1">
           <v-card-title>{{ item.title }}</v-card-title>
-          <v-card-subtitle>{{ item.date }}</v-card-subtitle>
-          <v-card-text>
-            {{ item.body || "Read more..." }}
-          </v-card-text>
-          <v-card-actions>
-            <v-btn text color="primary" @click="console.log(`/news/${item.id}`)" :to="`/news/${item.id}`">Read More</v-btn>
-          </v-card-actions>
+          <v-card-text> {{ item.body }}</v-card-text>
+          <v-card-subtitle>
+            Created: {{ formatDate(item.created_at) }}
+            <hr>
+            Last Update: {{ formatDate(item.updated_at) }}
+          </v-card-subtitle>
         </v-card>
       </v-col>
     </v-row>
@@ -36,7 +35,19 @@ const { news } = storeToRefs(newsStore);
 
 onMounted(() => {
   newsStore.fetchEvents();
-  console.log(news.value);
 });
+
+const formatDate = (dateString) => {
+  if (!dateString) return "Unknown Date";
+  const date = new Date(dateString);
+  return date.toLocaleString("hu-HU", { 
+    year: "numeric", 
+    month: "2-digit", 
+    day: "2-digit", 
+    hour: "2-digit", 
+    minute: "2-digit", 
+    second: "2-digit" 
+  });
+};
 
 </script>
